@@ -15,22 +15,22 @@ lerna-debug.log*
 
 # Tests
 /coverage
-**/.nyc_output
+.nyc_output
 
 # IDEs and editors
-**/.idea
-**/.project
-**/.classpath
-**/.c9/
+.idea
+.project
+.classpath
+.c9/
 *.launch
-**/.settings/
+.settings/
 *.sublime-workspace
 
 # IDE - VSCode
-**/.vscode/*
+.vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
 
-**/.env
+.env

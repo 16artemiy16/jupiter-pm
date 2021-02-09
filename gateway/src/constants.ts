@@ -5,5 +5,6 @@ export enum UserMsg {
   GetById = 'getById',
   Create = 'create',
   Update = 'update',
-  Remove = 'remove'
+  Remove = 'remove',
+  ValidateUser = 'validateUser'
 }
