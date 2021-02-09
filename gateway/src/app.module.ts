@@ -3,8 +3,9 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
 import { AppController } from './controllers/app.controller';
 import { AppService } from './app.service';
 import { UserController } from './controllers/user.controller';
-import { USER_SERVICE } from "./constants";
+import { JWT_SERVICE, USER_SERVICE } from "./constants";
 import { ConfigModule } from "@nestjs/config";
+import { JwtController } from './controllers/jwt.controller';
 
 @Module({
   imports: [
@@ -17,10 +18,18 @@ import { ConfigModule } from "@nestjs/config";
           urls: [process.env.AMQP_URL],
           queue: process.env.AMQP_QUEUE_USERS
         }
+      },
+      {
+        name: JWT_SERVICE,
+        transport: Transport.RMQ,
+        options: {
+          urls: [process.env.AMQP_URL],
+          queue: process.env.AMQP_QUEUE_JWT
+        }
       }
     ])
   ],
-  controllers: [AppController, UserController],
+  controllers: [AppController, UserController, JwtController],
   providers: [AppService],
 })
 export class AppModule {}

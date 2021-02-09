@@ -1,5 +1,4 @@
 export const USER_SERVICE = 'USER_SERVICE';
-export const JWT_SERVICE = 'JWT_SERVICE';
 
 export enum UserMsg {
   GetAll = 'getAll',
