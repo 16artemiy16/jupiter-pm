@@ -11,5 +11,6 @@ export enum UserMsg {
 }
 
 export enum JwtMsg {
-  Login = 'login'
+  Login = 'login',
+  Verify = 'verify'
 }

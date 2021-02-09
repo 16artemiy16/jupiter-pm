@@ -1,4 +1,13 @@
-import { Body, Controller, Inject, OnApplicationBootstrap, Post, UnauthorizedException } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Inject,
+  OnApplicationBootstrap,
+  Param,
+  Post,
+  UnauthorizedException
+} from '@nestjs/common';
 import { ClientProxy } from "@nestjs/microservices";
 import { tap } from "rxjs/operators";
 import { JWT_SERVICE, JwtMsg } from "../constants";

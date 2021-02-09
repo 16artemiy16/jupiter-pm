@@ -1,8 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { JwtService } from "@nestjs/jwt";
 import { ClientProxy } from "@nestjs/microservices";
-import { map } from "rxjs/operators";
+import { catchError, map } from "rxjs/operators";
 import { USER_SERVICE, UserMsg } from "./constants";
+import { from } from "rxjs/internal/observable/from";
+import { Observable } from "rxjs/internal/Observable";
+import { of } from "rxjs/internal/observable/of";
 
 @Injectable()
 export class JwtAuthService {
@@ -24,5 +27,16 @@ export class JwtAuthService {
             : null
         })
       );
+  }
+
+  verify(token: string): Observable<boolean> {
+    return from(
+      this.jwtService.verifyAsync(token, {
+        secret: process.env.JWT_SECRET
+      })
+    )
+      .pipe(
+        catchError(() => of(false)),
+      )
   }
 }

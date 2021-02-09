@@ -12,4 +12,9 @@ export class JwtAuthController {
   login({ email, password }): Observable<any> {
     return this.jwtAuthService.login(email, password);
   }
+
+  @MessagePattern(JwtMsg.Verify)
+  verify(token: string) {
+    return this.jwtAuthService.verify(token);
+  }
 }
