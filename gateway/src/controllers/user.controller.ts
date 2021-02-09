@@ -1,12 +1,16 @@
-import { Body, Controller, Delete, Get, Inject, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Inject, OnApplicationBootstrap, Param, Post, Put } from '@nestjs/common';
 import { USER_SERVICE, UserMsg } from "../constants";
 import { ClientProxy } from "@nestjs/microservices";
 
 @Controller('user')
-export class UserController {
+export class UserController implements OnApplicationBootstrap {
   constructor(
     @Inject(USER_SERVICE) private readonly userServiceClient: ClientProxy
   ) {}
+
+  async onApplicationBootstrap() {
+    await this.userServiceClient.connect();
+  }
 
   @Get()
   getAll() {
