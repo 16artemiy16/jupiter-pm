@@ -14,7 +14,7 @@ import { JWT_SERVICE, JwtMsg } from "../constants";
 
 
 @Controller('auth')
-export class JwtController implements OnApplicationBootstrap {
+export class AuthController implements OnApplicationBootstrap {
   constructor(
     @Inject(JWT_SERVICE) private readonly jwtServiceClient: ClientProxy
   ) {}
@@ -24,7 +24,7 @@ export class JwtController implements OnApplicationBootstrap {
   }
 
   @Post('login')
-  get(@Body('email') email: string, @Body('password') password: string) {
+  login(@Body('email') email: string, @Body('password') password: string) {
     return this.jwtServiceClient
       .send(JwtMsg.Login, { email, password })
       .pipe(

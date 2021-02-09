@@ -5,7 +5,7 @@ import { AppService } from './app.service';
 import { UserController } from './controllers/user.controller';
 import { JWT_SERVICE, USER_SERVICE } from "./constants";
 import { ConfigModule } from "@nestjs/config";
-import { JwtController } from './controllers/jwt.controller';
+import { AuthController } from './controllers/auth.controller';
 
 @Module({
   imports: [
@@ -29,7 +29,7 @@ import { JwtController } from './controllers/jwt.controller';
       }
     ])
   ],
-  controllers: [AppController, UserController, JwtController],
+  controllers: [AppController, UserController, AuthController],
   providers: [AppService],
 })
 export class AppModule {}
