@@ -23,8 +23,8 @@ export class BoardController {
   }
 
   @MessagePattern(BoardMsg.Create)
-  create(dto: any) {
-    return this.boardService.create(dto);
+  create({userId, dto}: {userId: string, dto: any}) {
+    return this.boardService.create(dto, userId);
   }
 
   @MessagePattern(BoardMsg.Update)

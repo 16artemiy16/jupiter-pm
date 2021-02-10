@@ -1,7 +1,21 @@
-import { Body, Controller, Delete, Get, Inject, OnApplicationBootstrap, Param, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Inject,
+  OnApplicationBootstrap,
+  Param,
+  Post,
+  Put,
+  UseGuards
+} from '@nestjs/common';
 import { BOARD_SERVICE, BoardMsg } from "../constants";
 import { ClientProxy } from "@nestjs/microservices";
+import { JwtGuard } from "../jwt.guard";
+import { User } from "../decorators/user.decorator";
 
+@UseGuards(JwtGuard)
 @Controller('board')
 export class BoardController implements OnApplicationBootstrap {
   constructor(
@@ -28,8 +42,8 @@ export class BoardController implements OnApplicationBootstrap {
   }
 
   @Post()
-  create(@Body() dto: any) {
-    return this.boardServiceClient.send(BoardMsg.Create, dto);
+  create(@Body() dto: any, @User('_id') userId: string) {
+    return this.boardServiceClient.send(BoardMsg.Create, { dto, userId });
   }
 
   @Put(':id')

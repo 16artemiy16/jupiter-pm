@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Board, BoardDocument } from "./schemas/board.schema";
 import { Model } from "mongoose";
+import { BoardUserRole } from "./enums/board-user-role.enum";
 
 @Injectable()
 export class BoardService {
@@ -24,8 +25,12 @@ export class BoardService {
     })
   }
 
-  async create(dto: any) {
-    const newBoard = new this.boardModel(dto);
+  async create(dto: any, userId: string) {
+    const newBoard = new this.boardModel({
+      ...dto,
+      creator: userId,
+      users: { user: userId, role: BoardUserRole.Admin }
+    });
     return await newBoard.save();
   }
 
