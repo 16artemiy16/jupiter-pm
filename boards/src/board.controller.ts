@@ -9,31 +9,31 @@ export class BoardController {
 
   @MessagePattern(BoardMsg.GetAll)
   getAll() {
-    return 'getAll';
+    return this.boardService.getAll();
   }
 
   @MessagePattern(BoardMsg.GetById)
   getById(id: string) {
-    return id;
+    return this.boardService.getById(id);
   }
 
   @MessagePattern(BoardMsg.GetByUser)
   getByUser(userId: string) {
-    return userId;
+    return this.boardService.getByUser(userId);
   }
 
   @MessagePattern(BoardMsg.Create)
   create(dto: any) {
-    return dto;
+    return this.boardService.create(dto);
   }
 
   @MessagePattern(BoardMsg.Update)
   update({id, dto}: {id: string, dto: any}) {
-    return dto;
+    return this.boardService.update(id, dto);
   }
 
   @MessagePattern(BoardMsg.Remove)
   remove(id: string) {
-    return id;
+    return this.boardService.remove(id);
   }
 }
