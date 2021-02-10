@@ -10,6 +10,7 @@ async function bootstrap() {
       queue: process.env.AMQP_QUEUE_BOARDS
     }
   });
+
   await app.listen(() => console.log('Boards microservice started'));
 }
 bootstrap();

@@ -1,7 +1,12 @@
-import { Controller } from '@nestjs/common';
+import {
+  Controller,
+} from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
 import { BoardService } from './board.service';
 import { BoardMsg } from "./constants";
+import { CreateBoardDto } from "./dtos/create-board.dto";
+import { UpdateBoardDto } from "./dtos/update-board.dto";
+import { validateDtoThrowable } from "./utils/validate-dto.util";
 
 @Controller()
 export class BoardController {
@@ -23,12 +28,14 @@ export class BoardController {
   }
 
   @MessagePattern(BoardMsg.Create)
-  create({userId, dto}: {userId: string, dto: any}) {
+  async create({userId, dto}: {userId: string, dto: CreateBoardDto}) {
+    await validateDtoThrowable(dto, CreateBoardDto);
     return this.boardService.create(dto, userId);
   }
 
   @MessagePattern(BoardMsg.Update)
-  update({id, dto}: {id: string, dto: any}) {
+  async update({id, dto}: {id: string, dto: UpdateBoardDto}) {
+    await validateDtoThrowable(dto, UpdateBoardDto);
     return this.boardService.update(id, dto);
   }
 
