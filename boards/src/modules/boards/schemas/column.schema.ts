@@ -7,6 +7,9 @@ export type ColumnDocument = Column & Document;
 export class Column {
   @Prop({ required: true })
   name: string;
+
+  @Prop({ required: true })
+  board: string;
 }
 
 export const ColumnSchema = SchemaFactory.createForClass(Column);

@@ -12,7 +12,8 @@ export class ColumnsService {
 
   async getByBoard(boardId: string) {
     return await this.columnModel
-      .find({ board: boardId })
+      // .find({ board: boardId })
+      .find({  })
       .lean()
       .exec();
   }
