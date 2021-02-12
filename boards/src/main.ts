@@ -1,9 +1,9 @@
 import { NestFactory } from '@nestjs/core';
 import { Transport } from '@nestjs/microservices';
-import { BoardModule } from './board.module';
+import { TaskManagementModule } from './task-management.module';
 
 async function bootstrap() {
-  const app = await NestFactory.createMicroservice(BoardModule, {
+  const app = await NestFactory.createMicroservice(TaskManagementModule, {
     transport: Transport.RMQ,
     options: {
       urls: [process.env.AMQP_URL],

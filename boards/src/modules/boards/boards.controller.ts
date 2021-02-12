@@ -2,15 +2,15 @@ import {
   Controller,
 } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
-import { BoardService } from './board.service';
-import { BoardMsg } from "./constants";
+import { BoardsService } from './boards.service';
+import { BoardMsg } from "./board.constants";
 import { CreateBoardDto } from "./dtos/create-board.dto";
 import { UpdateBoardDto } from "./dtos/update-board.dto";
-import { validateDtoThrowable } from "./utils/validate-dto.util";
+import { validateDtoThrowable } from "../../utils/validate-dto.util";
 
 @Controller()
-export class BoardController {
-  constructor(private readonly boardService: BoardService) {}
+export class BoardsController {
+  constructor(private readonly boardService: BoardsService) {}
 
   @MessagePattern(BoardMsg.GetAll)
   getAll() {

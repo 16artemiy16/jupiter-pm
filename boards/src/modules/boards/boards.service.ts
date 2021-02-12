@@ -5,7 +5,7 @@ import { Model } from "mongoose";
 import { BoardUserRole } from "./enums/board-user-role.enum";
 
 @Injectable()
-export class BoardService {
+export class BoardsService {
   constructor(
     @InjectModel(Board.name) private readonly boardModel: Model<BoardDocument>
   ) {}
