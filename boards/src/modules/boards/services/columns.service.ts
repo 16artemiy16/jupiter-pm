@@ -3,6 +3,7 @@ import { Column, ColumnDocument } from "../schemas/column.schema";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { UpdateColumnDto } from "../dtos/update-column.dto";
+import { CreateColumnDto } from "../dtos/create-column.dto";
 
 @Injectable()
 export class ColumnsService {
@@ -12,13 +13,12 @@ export class ColumnsService {
 
   async getByBoard(boardId: string) {
     return await this.columnModel
-      // .find({ board: boardId })
-      .find({  })
+      .find({ board: boardId })
       .lean()
       .exec();
   }
 
-  async create(boardId: string, dto: any) {
+  async create(boardId: string, dto: CreateColumnDto) {
     const newColumn = new this.columnModel({ ...dto, board: boardId });
     return await newColumn.save();
   }

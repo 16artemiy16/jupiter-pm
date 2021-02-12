@@ -3,7 +3,7 @@ import { Document } from 'mongoose';
 
 export type ColumnDocument = Column & Document;
 
-@Schema()
+@Schema({ versionKey: false })
 export class Column {
   @Prop({ required: true })
   name: string;
