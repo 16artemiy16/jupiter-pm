@@ -1,7 +1,8 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Schema as MSchema } from 'mongoose';
 import { BoardUserI } from "../interfaces/board-users.interface";
 import { BoardUserRole } from "../enums/board-user-role.enum";
+import { Column } from "./column.schema";
 
 export type BoardDocument = Board & Document;
 
@@ -21,6 +22,15 @@ export class Board {
     }]
   })
   users: BoardUserI[];
+
+  @Prop({
+    type: [{
+      required: true,
+      type: MSchema.Types.ObjectId,
+      ref: Column.name
+    }]
+  })
+  columns: string;
 }
 
 export const BoardSchema = SchemaFactory.createForClass(Board);

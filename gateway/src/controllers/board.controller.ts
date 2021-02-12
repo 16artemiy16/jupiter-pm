@@ -55,4 +55,14 @@ export class BoardController implements OnApplicationBootstrap {
   remove(@Param('id') id: string) {
     return this.boardServiceClient.send(BoardMsg.Remove, id);
   }
+
+  @Get(':id/column')
+  getColumns(@Param('id') id: string) {
+    return this.boardServiceClient.send(BoardMsg.GetColumns, id)
+  }
+
+  @Post(':id/column')
+  createColumn(@Param('id') boardId: string, @Body() dto: any) {
+    return this.boardServiceClient.send(BoardMsg.AddColumn, { boardId, dto })
+  }
 }

@@ -4,5 +4,9 @@ export enum BoardMsg {
   GetByUser = 'getByUser',
   Create = 'create',
   Update = 'update',
-  Remove = 'remove'
+  Remove = 'remove',
+  GetColumns = 'getColumns',
+  AddColumn = 'addColumn',
+  UpdateColumn = 'updateColumn',
+  RemoveColumn = 'removeColumn'
 }
