@@ -2,45 +2,79 @@ import {
   Controller,
 } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
+import { Types } from 'mongoose';
 import { BoardsService } from './boards.service';
 import { BoardMsg } from "./board.constants";
 import { CreateBoardDto } from "./dtos/create-board.dto";
 import { UpdateBoardDto } from "./dtos/update-board.dto";
-import { validateDtoThrowable } from "../../utils/validate-dto.util";
+import validateDto from "../../utils/validate-dto.util";
+import { ObjectIdMalformedException } from "../../exceptions/object-id-mailformed.exception";
+import { DtoValidationException } from "../../exceptions/dto-validation.exception";
+import { NotFoundException } from "../../exceptions/not-found.exception";
 
 @Controller()
 export class BoardsController {
   constructor(private readonly boardService: BoardsService) {}
 
   @MessagePattern(BoardMsg.GetAll)
-  getAll() {
-    return this.boardService.getAll();
+  async getAll() {
+    return await this.boardService.getAll();
   }
 
   @MessagePattern(BoardMsg.GetById)
-  getById(id: string) {
-    return this.boardService.getById(id);
+  async getById(id: string) {
+    if (!Types.ObjectId.isValid(id)) {
+      throw new ObjectIdMalformedException();
+    }
+
+    const board = await this.boardService.getById(id);
+
+    if (!board) {
+      throw new NotFoundException();
+    }
+
+    return board;
   }
 
   @MessagePattern(BoardMsg.GetByUser)
-  getByUser(userId: string) {
-    return this.boardService.getByUser(userId);
+  async getByUser(userId: string) {
+    return await this.boardService.getByUser(userId);
   }
 
   @MessagePattern(BoardMsg.Create)
   async create({userId, dto}: {userId: string, dto: CreateBoardDto}) {
-    await validateDtoThrowable(dto, CreateBoardDto);
-    return this.boardService.create(dto, userId);
+    const dtoErrors = await validateDto(dto, CreateBoardDto);
+
+    if (dtoErrors.length) {
+      throw new DtoValidationException(dtoErrors);
+    }
+
+    return await this.boardService.create(dto, userId)
   }
 
   @MessagePattern(BoardMsg.Update)
   async update({id, dto}: {id: string, dto: UpdateBoardDto}) {
-    await validateDtoThrowable(dto, UpdateBoardDto);
-    return this.boardService.update(id, dto);
+    const dtoErrors = await validateDto(dto, UpdateBoardDto);
+
+    if (dtoErrors.length) {
+      throw new DtoValidationException(dtoErrors);
+    }
+
+    return await this.boardService.update(id, dto);
   }
 
   @MessagePattern(BoardMsg.Remove)
-  remove(id: string) {
-    return this.boardService.remove(id);
+  async remove(id: string) {
+    if (!Types.ObjectId.isValid(id)) {
+      throw new ObjectIdMalformedException();
+    }
+
+    const removedBoard = await this.boardService.remove(id);
+
+    if (!removedBoard) {
+      throw new NotFoundException();
+    }
+
+    return removedBoard;
   }
 }
