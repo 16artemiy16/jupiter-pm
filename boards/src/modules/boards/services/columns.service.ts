@@ -25,7 +25,7 @@ export class ColumnsService {
 
   async update(id: string, dto: UpdateColumnDto) {
     return await this.columnModel
-      .findByIdAndUpdate(id, dto, { new: true })
+      .findByIdAndUpdate(id, dto, { new: true, runValidators: true })
       .lean()
       .exec();
   };
