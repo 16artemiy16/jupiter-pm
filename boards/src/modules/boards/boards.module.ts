@@ -3,22 +3,24 @@ import { Board, BoardSchema } from "./schemas/board.schema";
 import { MongooseModule } from "@nestjs/mongoose";
 import { BoardsService } from "./services/boards.service";
 import { BoardsController } from "./boards.controller";
-import { Column, ColumnSchema } from "./schemas/column.schema";
-import { ColumnsService } from "./services/columns.service";
+import { TasksService } from "../tasks/tasks.service";
+import { TasksModule } from "../tasks/tasks.module";
 
 @Module({
   imports: [
     MongooseModule.forFeature([
-      { name: Board.name, schema: BoardSchema },
-      { name: Column.name, schema: ColumnSchema }
+      { name: Board.name, schema: BoardSchema }
     ]),
+    TasksModule
   ],
   providers: [
-    BoardsService,
-    ColumnsService
+    BoardsService
   ],
   controllers: [
     BoardsController
+  ],
+  exports: [
+    BoardsService
   ]
 })
 export class BoardsModule {}

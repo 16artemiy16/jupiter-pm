@@ -1,12 +1,14 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Schema as MSchema } from 'mongoose';
+import { Document } from 'mongoose';
 import { BoardUserI } from "../interfaces/board-users.interface";
 import { BoardUserRole } from "../enums/board-user-role.enum";
-import { Column } from "./column.schema";
 
 export type BoardDocument = Board & Document;
 
-@Schema({ timestamps: { createdAt: true, updatedAt: false } })
+@Schema({
+  timestamps: { createdAt: true, updatedAt: false },
+  versionKey: false,
+})
 export class Board {
   @Prop({ required: true })
   title: string;
@@ -24,14 +26,19 @@ export class Board {
   users: BoardUserI[];
 
   @Prop({
+    default: [],
     type: [{
-      required: true,
-      type: MSchema.Types.ObjectId,
-      ref: Column.name
+      name: String,
+      /**
+       * If true then the newly created tasks will be placed in this column.
+       * Should be only one true among all the board columns.
+       **/
+      isSpawn: { type: Boolean, default: false },
     }]
   })
-  columns: string;
+  columns: any[];
 }
 
 export const BoardSchema = SchemaFactory.createForClass(Board);
+
 BoardSchema.index({ title: 1 });

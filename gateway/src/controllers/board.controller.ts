@@ -10,7 +10,7 @@ import {
   Put,
   UseGuards
 } from '@nestjs/common';
-import { BOARD_SERVICE, BoardMsg } from "../constants";
+import { BOARD_SERVICE, BoardMsg, TaskMsg } from "../constants";
 import { ClientProxy } from "@nestjs/microservices";
 import { JwtGuard } from "../jwt.guard";
 import { User } from "../decorators/user.decorator";
@@ -25,6 +25,11 @@ export class BoardController implements OnApplicationBootstrap {
   async onApplicationBootstrap() {
     await this.boardServiceClient.connect();
   }
+
+
+  /**
+   ** Boards
+   */
 
   @Get()
   getAll() {
@@ -56,13 +61,39 @@ export class BoardController implements OnApplicationBootstrap {
     return this.boardServiceClient.send(BoardMsg.Remove, id);
   }
 
-  @Get(':id/column')
-  getColumns(@Param('id') id: string) {
-    return this.boardServiceClient.send(BoardMsg.GetColumns, id)
+
+  /**
+   ** Columns
+   */
+
+  // TODO implement columns in future
+
+  /**
+   ** Tasks
+   */
+
+  @Get(':id/task')
+  getTasks(@Param('id') id: string, @Param('_id') userId: string) {
+    return this.boardServiceClient.send(TaskMsg.GetByBoard, { id, userId });
   }
 
-  @Post(':id/column')
-  createColumn(@Param('id') boardId: string, @Body() dto: any) {
-    return this.boardServiceClient.send(BoardMsg.AddColumn, { boardId, dto })
+  @Post(':id/task')
+  createTask(@Param('id') boardId, @User('_id') userId: string, @Body() dto: any) {
+    return this.boardServiceClient.send(TaskMsg.Create, { boardId, userId, dto });
+  }
+
+  @Put('/task/:id/column/:column')
+  changeTaskColumn(@Param('id') id: string, @Param('column') column: string, @User('_id') userId: string) {
+    return this.boardServiceClient.send(TaskMsg.ChangeColumn, { id, userId, column })
+  }
+
+  @Put('/task/:id')
+  updateTask(@Param('id') id, @User('_id') userId: string, @Body() dto: any) {
+    return this.boardServiceClient.send(TaskMsg.Update, { id, userId, dto });
+  }
+
+  @Delete('/task/:id')
+  removeTask(@Param('id') id: string, @User('_id') userId: string) {
+    return this.boardServiceClient.send(TaskMsg.Remove, { id, userId });
   }
 }
