@@ -4,22 +4,20 @@ import {
 import { MessagePattern } from '@nestjs/microservices';
 import { Types } from 'mongoose';
 import { BoardsService } from './services/boards.service';
-import { BoardMsg } from "./board.constants";
+import { BoardMsg, TaskMsg } from "./boards.constants";
 import { CreateBoardDto } from "./dtos/create-board.dto";
 import { UpdateBoardDto } from "./dtos/update-board.dto";
 import validateDto from "../../utils/validate-dto.util";
 import { ObjectIdMalformedException } from "../../exceptions/object-id-mailformed.exception";
 import { DtoValidationException } from "../../exceptions/dto-validation.exception";
 import { NotFoundException } from "../../exceptions/not-found.exception";
-import { CreateColumnDto } from "./dtos/create-column.dto";
-import { ColumnsService } from "./services/columns.service";
-import { UpdateColumnDto } from "./dtos/update-column.dto";
+import { TasksService } from "../tasks/tasks.service";
 
 @Controller()
 export class BoardsController {
   constructor(
     private readonly boardService: BoardsService,
-    private readonly columnService: ColumnsService
+    private readonly taskService: TasksService
   ) {}
 
   @MessagePattern(BoardMsg.GetAll)
@@ -84,36 +82,33 @@ export class BoardsController {
     return removedBoard;
   }
 
-  @MessagePattern(BoardMsg.GetColumns)
-  async getColumns(id: string) {
-    if (!Types.ObjectId.isValid(id)) {
-      throw new ObjectIdMalformedException();
-    }
 
-    return await this.columnService.getByBoard(id);
+  /**
+   ** Tasks
+   */
+
+  @MessagePattern(TaskMsg.GetByBoard)
+  async getByBoard({ id, userId }: { id: string, userId: string }) {
+    return await this.boardService.getTasksByBoard(id);
   }
 
-  @MessagePattern(BoardMsg.AddColumn)
-  async addColumn({ boardId, dto }: { boardId: string, dto: CreateColumnDto }) {
-    console.log('DTO', dto);
-    if (!Types.ObjectId.isValid(boardId)) {
-      throw new ObjectIdMalformedException();
-    }
-
-    return await this.columnService.create(boardId, dto);
+  @MessagePattern(TaskMsg.Create)
+  async createTask({ boardId, userId, dto }: { boardId: string, userId: string, dto: any }) {
+    return await this.boardService.addTask(boardId, userId, dto);
   }
 
-  @MessagePattern(BoardMsg.UpdateColumn)
-  async updateColumn({ id, dto }: { id: string, dto: UpdateColumnDto }) {
-    if (!Types.ObjectId.isValid(id)) {
-      throw new ObjectIdMalformedException();
-    }
-
-    return await this.columnService.update(id, dto);
+  @MessagePattern(TaskMsg.ChangeColumn)
+  async changeTaskColumn({ id, userId, column }: { id: string, userId: string, column: string }) {
+    return await this.taskService.changeColumn(id, column);
   }
 
-  @MessagePattern(BoardMsg.RemoveColumn)
-  async removeColumn(columnId: string) {
-    return await this.columnService.remove(columnId);
+  @MessagePattern(TaskMsg.Update)
+  async updateTask({ id, userId, dto }: { id: string, userId: string, dto: any }) {
+    return await this.taskService.update(id, dto);
+  }
+
+  @MessagePattern(TaskMsg.Remove)
+  async removeTask({ id, userId } : { id: string, userId: string }) {
+    return await this.taskService.remove(id);
   }
 }
