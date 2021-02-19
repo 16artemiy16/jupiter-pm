@@ -1,10 +1,8 @@
 import {
   Body,
   Controller,
-  Get,
   Inject,
   OnApplicationBootstrap,
-  Param,
   Post,
   UnauthorizedException
 } from '@nestjs/common';
@@ -28,9 +26,9 @@ export class AuthController implements OnApplicationBootstrap {
     return this.jwtServiceClient
       .send(JwtMsg.Login, { email, password })
       .pipe(
-        tap((jwt) => {
+        tap(({ jwt }) => {
           if (jwt === null) {
-            throw new UnauthorizedException();
+            throw new UnauthorizedException('The user with this email or password does not exist');
           }
         })
       );
