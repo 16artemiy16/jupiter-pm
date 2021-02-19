@@ -25,6 +25,8 @@ import { USER_SERVICE } from "./constants";
     ])
   ],
   controllers: [JwtAuthController],
-  providers: [JwtAuthService],
+  providers: [
+    JwtAuthService
+  ],
 })
 export class JwtAuthModule {}

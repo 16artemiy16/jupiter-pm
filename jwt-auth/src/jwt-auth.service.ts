@@ -29,7 +29,7 @@ export class JwtAuthService {
       );
   }
 
-  verify(token: string): Observable<boolean> {
+  verify(token: string): Observable<any> {
     return from(
       this.jwtService.verifyAsync(token, {
         secret: process.env.JWT_SECRET
